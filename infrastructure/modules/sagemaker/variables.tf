@@ -11,7 +11,7 @@ variable "notebook_instance_name" {
 }
 
 variable "instance_type" {
-  type = string
+  type    = string
   default = "ml.t2.medium"
 }
 
@@ -20,6 +20,6 @@ variable "s3_bucket_name" {
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }

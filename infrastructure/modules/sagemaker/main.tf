@@ -2,8 +2,16 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  account_id = data.aws_caller_identity.current.account_id
+  account_id  = data.aws_caller_identity.current.account_id
   region_code = data.aws_region.current.name
+}
+
+resource "aws_s3_bucket" "main" {
+  bucket = var.s3_bucket_name
+
+  tags = merge(var.tags, {
+    Name = var.s3_bucket_name
+  })
 }
 
 resource "aws_iam_role" "main" {
@@ -17,7 +25,7 @@ resource "aws_iam_role" "main" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::${var.s3_bucket_name}"
+                "arn:aws:s3:::${aws_s3_bucket.main.id}"
             ]
         },
         {
@@ -26,7 +34,7 @@ resource "aws_iam_role" "main" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::${var.s3_bucket_name}*"
+                "arn:aws:s3:::${aws_s3_bucket.main.id}*"
             ]
         },
         {
@@ -80,9 +88,10 @@ resource "aws_sagemaker_notebook_instance" "main" {
   role_arn                = aws_iam_role.main.arn
   instance_type           = var.instance_type
   default_code_repository = aws_sagemaker_code_repository.main.code_repository_name
-  lifecycle_config_name = "./on_start.sh"
+  lifecycle_config_name   = "./on_start.sh"
 
   tags = merge(var.tags, {
-    Name = var.notebook_instance_name
+    Name   = var.notebook_instance_name
+    BUCKET = aws_s3_bucket.main.id
   })
 }
