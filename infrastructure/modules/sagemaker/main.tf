@@ -14,6 +14,12 @@ resource "aws_s3_bucket" "main" {
   })
 }
 
+resource "aws_s3_bucket_object" "object" {
+  bucket = aws_s3_bucket.main.id
+  key    = "sample-file-assessment.snappy.parquet"
+  source = "../../../fixtures/sample-file-assessment.snappy.parquet"
+}
+
 resource "aws_iam_role" "main" {
   assume_role_policy = <<EOF
 {

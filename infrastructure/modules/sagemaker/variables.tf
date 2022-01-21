@@ -1,13 +1,16 @@
 variable "repository_name" {
-  type = string
+  type    = string
+  default = "data-application-example"
 }
 
 variable "repository_url" {
-  type = string
+  type    = string
+  default = "https://github.com/n1nj4-r4cc00n/data-application-example.git"
 }
 
 variable "notebook_instance_name" {
-  type = string
+  type    = string
+  default = "DeleteMe"
 }
 
 variable "instance_type" {
@@ -16,7 +19,8 @@ variable "instance_type" {
 }
 
 variable "s3_bucket_name" {
-  type = string
+  type    = string
+  default = "DeleteMe"
 }
 
 variable "tags" {
