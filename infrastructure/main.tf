@@ -27,3 +27,7 @@ provider "aws" {
     }
   }
 }
+
+module "notebook" {
+  source = "./modules/sagemaker"
+}
