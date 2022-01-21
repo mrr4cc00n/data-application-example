@@ -5,13 +5,13 @@ terraform {
       version = "3.72.0"
     }
   }
-  backend "remote" {
-    organization = "r4cc00n"
-
-    workspaces {
-      name = "aws-templates"
-    }
-  }
+//  backend "remote" {
+//    organization = "r4cc00n"
+//
+//    workspaces {
+//      name = "aws-templates"
+//    }
+//  }
 }
 
 provider "aws" {

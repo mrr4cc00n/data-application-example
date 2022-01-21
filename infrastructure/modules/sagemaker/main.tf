@@ -14,14 +14,27 @@ resource "aws_s3_bucket" "main" {
   })
 }
 
-resource "aws_s3_bucket_object" "object" {
-  bucket = aws_s3_bucket.main.id
-  key    = "sample-file-assessment.snappy.parquet"
-  source = "../../../fixtures/sample-file-assessment.snappy.parquet"
-}
-
 resource "aws_iam_role" "main" {
   assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "sagemaker.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "main" {
+  name   = "test_policy"
+  role   = aws_iam_role.main.id
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -36,7 +49,8 @@ resource "aws_iam_role" "main" {
         },
         {
             "Action": [
-                "s3:GetObject"
+                "s3:GetObject",
+                "s3:PutObject"
             ],
             "Effect": "Allow",
             "Resource": [
@@ -94,10 +108,8 @@ resource "aws_sagemaker_notebook_instance" "main" {
   role_arn                = aws_iam_role.main.arn
   instance_type           = var.instance_type
   default_code_repository = aws_sagemaker_code_repository.main.code_repository_name
-  lifecycle_config_name   = "./on_start.sh"
 
   tags = merge(var.tags, {
     Name   = var.notebook_instance_name
-    BUCKET = aws_s3_bucket.main.id
   })
 }

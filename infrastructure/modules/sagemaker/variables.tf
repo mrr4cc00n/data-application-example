@@ -10,7 +10,7 @@ variable "repository_url" {
 
 variable "notebook_instance_name" {
   type    = string
-  default = "DeleteMe"
+  default = "deleteme123456789"
 }
 
 variable "instance_type" {
@@ -20,8 +20,9 @@ variable "instance_type" {
 
 variable "s3_bucket_name" {
   type    = string
-  default = "DeleteMe"
+  default = "deleteme123456789"
 }
+
 
 variable "tags" {
   type    = map(string)
